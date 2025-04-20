@@ -13,10 +13,20 @@ def get_db_connection():
 # Show product list
 @app.route('/')
 def index():
+    search_query = request.args.get('q', '')
+
     conn = get_db_connection()
-    products = conn.execute('SELECT * FROM products').fetchall()
+    if search_query:
+        products = conn.execute(
+            "SELECT * FROM products WHERE product_name LIKE ?",
+            ('%' + search_query + '%',)
+        ).fetchall()
+    else:
+        products = conn.execute('SELECT * FROM products').fetchall()
     conn.close()
-    return render_template('index.html', products=products)
+
+    return render_template('index.html', products=products, search_query=search_query)
+
 
 # Add a product to the shopping cart
 @app.route('/add_to_cart/<int:product_id>')
