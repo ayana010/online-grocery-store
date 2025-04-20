@@ -14,18 +14,27 @@ def get_db_connection():
 @app.route('/')
 def index():
     search_query = request.args.get('q', '')
+    selected_category = request.args.get('category', '')
 
     conn = get_db_connection()
+
+    query = "SELECT * FROM products WHERE 1=1"
+    params = []
+
     if search_query:
-        products = conn.execute(
-            "SELECT * FROM products WHERE product_name LIKE ?",
-            ('%' + search_query + '%',)
-        ).fetchall()
-    else:
-        products = conn.execute('SELECT * FROM products').fetchall()
+        query += " AND product_name LIKE ?"
+        params.append(f"%{search_query}%")
+
+    if selected_category:
+        query += " AND category = ?"
+        params.append(selected_category)
+
+    products = conn.execute(query, params).fetchall()
+    categories = conn.execute("SELECT DISTINCT category FROM products").fetchall()
     conn.close()
 
-    return render_template('index.html', products=products, search_query=search_query)
+    return render_template('index.html', products=products, categories=categories, search_query=search_query, selected_category=selected_category)
+
 
 
 # Add a product to the shopping cart

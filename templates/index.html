@@ -5,11 +5,21 @@
 </head>
 <body>
     <h1>Product List</h1>
+
     <a href="{{ url_for('view_cart') }}">🛒 View Cart</a>
     <form method="GET" action="{{ url_for('index') }}">
         <input type="text" name="q" placeholder="Search..." value="{{ search_query }}">
         <button type="submit">Search</button>
     </form>
+
+        <h3>Categories:</h3>
+        <ul>
+        <li><a href="{{ url_for('index') }}">All</a></li>
+        {% for c in categories %}
+            <li><a href="{{ url_for('index', category=c['category']) }}"> {{ c['category'] }}</a></li>
+        {% endfor %}
+        </ul>
+
     
     <ul>
         {% for product in products %}
