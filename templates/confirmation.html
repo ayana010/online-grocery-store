@@ -1,15 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Product List - Online Grocery{% endblock %}
+{% block title %}Order Confirmation - Online Grocery{% endblock %}
 
 {% block content %}
-<head>
-    <title>Order Confirmed</title>
-</head>
-<body>
-    <h1>Thank You, {{ name }}!</h1>
-    <p>Your order has been received. We’re preparing it now 🛒✨</p>
-    <a href="{{ url_for('index') }}">Return to Home</a>
-</body>
-   
- {% endblock %}
+<h1>Thank you for your order, {{ name }}!</h1>
+<p>We’ve sent a confirmation email to <strong>{{ email }}</strong>.</p>
+<p>Your items will be delivered to your address shortly.</p>
+<a href="{{ url_for('index') }}">← Back to Home</a>
+{% endblock %}

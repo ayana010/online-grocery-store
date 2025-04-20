@@ -5,9 +5,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="logo">
-        <a href="{{ url_for('index') }}">Online Grocery</a>
-    </div>
+    <div class="header-center">
+        <div class="logo">
+          <a href="{{ url_for('index') }}">🛒 Online Grocery</a>
+        </div>
+        <div class="search-wrapper">
+          <form method="GET" action="{{ url_for('index') }}" class="search-form">
+            <input type="text" name="q" placeholder="Search..." value="{{ search_query|default('') }}">
+            <button type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+      
 
     <div class="floating-cart-toggle">
         <button onclick="toggleCart()">🛒 Cart</button>
@@ -36,6 +45,8 @@
             {% endif %}
         </div>
     </div>
+
+ 
     
     {% block content %}
     {% endblock %}
@@ -46,6 +57,41 @@
           cart.classList.toggle("hidden");
         }
       </script>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const form = document.getElementById("checkout-form");
+          const submitBtn = document.getElementById("submit-button");
+      
+          if (form && submitBtn) {
+            const requiredFields = form.querySelectorAll("input[required], select[required]");
+            
+            function checkValidity() {
+              let isValid = true;
+              requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                  isValid = false;
+                }
+              });
+      
+              submitBtn.disabled = !isValid;
+              if (!isValid) {
+                submitBtn.classList.add("disabled");
+              } else {
+                submitBtn.classList.remove("disabled");
+              }
+            }
+      
+            requiredFields.forEach(field => {
+              field.addEventListener("input", checkValidity);
+            });
+      
+            checkValidity(); // 初期状態もチェック
+          }
+        });
+      </script>
+
+
       
 </body>
 </html>

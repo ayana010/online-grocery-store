@@ -76,38 +76,50 @@ def view_cart():
     conn.close()
     return render_template('cart.html', items=items, total_price=total_price)
 
+
 # Checkout form route (GET: show form, POST: handle form)
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
+        phone = request.form.get('phone')
         address = request.form.get('address')
+        state = request.form.get('state')
 
-        # Check if any required field is missing
-        if not name or not email or not address:
-            error = "Please fill in all required fields."
-            return render_template('checkout.html', error=error)
+        # 入力バリデーション
+        if not all([name, email, phone, address, state]):
+            return render_template('checkout.html', error="Please fill in all fields.")
 
-        # ↓↓↓ Stock update starts here ↓↓↓
         cart = session.get('cart', {})
         conn = get_db_connection()
+        failed_items = []
 
+        # 在庫チェック
+        for product_id, quantity in cart.items():
+            product = conn.execute('SELECT * FROM products WHERE product_id = ?', (product_id,)).fetchone()
+            if product and quantity > product['in_stock']:
+                failed_items.append(product['product_name'])
+
+        if failed_items:
+            conn.close()
+            return redirect(url_for('view_cart'))
+
+        # 在庫更新
         for product_id, quantity in cart.items():
             conn.execute(
-            'UPDATE products SET in_stock = in_stock - ? WHERE product_id = ?',
-            (quantity, product_id)
+                'UPDATE products SET in_stock = in_stock - ? WHERE product_id = ?',
+                (quantity, product_id)
             )
 
         conn.commit()
         conn.close()
-        # ↑↑↑ Stock updated in database ↑↑↑
 
-        # Clear the cart
+        # カートクリア
         session.pop('cart', None)
 
-        # Show confirmation page
-        return render_template('confirmation.html', name=name)
+        # 確認ページへ
+        return render_template('confirmation.html', name=name, email=email)
 
     return render_template('checkout.html')
 
@@ -159,6 +171,11 @@ def inject_helpers():
         conn.close()
         return product
     return dict(get_product=get_product)
+
+@app.route('/clear_cart')
+def clear_cart():
+    session.pop('cart', None)
+    return redirect(url_for('view_cart'))
 
 
 # Start the app
