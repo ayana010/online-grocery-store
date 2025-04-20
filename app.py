@@ -151,6 +151,14 @@ def decrease_quantity(product_id):
 
     return redirect(url_for('view_cart'))
 
+@app.context_processor
+def inject_helpers():
+    def get_product(product_id):
+        conn = get_db_connection()
+        product = conn.execute('SELECT * FROM products WHERE product_id = ?', (product_id,)).fetchone()
+        conn.close()
+        return product
+    return dict(get_product=get_product)
 
 
 # Start the app
