@@ -70,7 +70,19 @@ def checkout():
             error = "Please fill in all required fields."
             return render_template('checkout.html', error=error)
 
-        # TODO: Decrease stock in DB here (optional)
+        # ↓↓↓ Stock update starts here ↓↓↓
+        cart = session.get('cart', {})
+        conn = get_db_connection()
+
+        for product_id, quantity in cart.items():
+            conn.execute(
+            'UPDATE products SET in_stock = in_stock - ? WHERE product_id = ?',
+            (quantity, product_id)
+            )
+
+        conn.commit()
+        conn.close()
+        # ↑↑↑ Stock updated in database ↑↑↑
 
         # Clear the cart
         session.pop('cart', None)
