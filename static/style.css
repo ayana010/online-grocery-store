@@ -83,3 +83,34 @@ button:hover {
     color: #888;
     font-style: italic;
 }
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category-list li {
+    list-style: none;
+}
+
+.category-list a {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    color: #333;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.category-list a:hover {
+    background-color: #ddd;
+}
+
+.category-list a.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}

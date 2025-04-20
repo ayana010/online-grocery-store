@@ -15,12 +15,23 @@
     </form>
 
         <h3>Categories:</h3>
-        <ul>
-        <li><a href="{{ url_for('index') }}">All</a></li>
-        {% for c in categories %}
-            <li><a href="{{ url_for('index', category=c['category']) }}"> {{ c['category'] }}</a></li>
-        {% endfor %}
+        <ul class="category-list">
+            <li>
+                <a href="{{ url_for('index') }}"
+                   class="{% if not selected_category %}active{% endif %}">
+                   All
+                </a>
+            </li>
+            {% for c in categories %}
+            <li>
+                <a href="{{ url_for('index', category=c['category']) }}"
+                   class="{% if selected_category == c['category'] %}active{% endif %}">
+                   {{ c['category'] }}
+                </a>
+            </li>
+            {% endfor %}
         </ul>
+        
 
     
     <ul>
