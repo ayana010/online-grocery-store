@@ -202,3 +202,45 @@ a[href="{{ url_for('index') }}"]:hover {
     background-color: #218838;
 }
 
+.cart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cart-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    border-radius: 6px;
+    gap: 8px;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.cart-line a {
+    text-decoration: none;
+    padding: 4px 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cart-line a:hover {
+    background-color: #ccc;
+}
+
+.cart-actions a {
+    padding: 6px 10px;
+    background-color: #eee;
+    color: #333;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
