@@ -1,34 +1,40 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Your Cart</title>
-</head>
-<body>
+{% block title %}Product List - Online Grocery{% endblock %}
+
+{% block content %}
     <h1>Your Shopping Cart</h1>
     <a href="{{ url_for('index') }}">← Back to Products</a>
     {% if items %}
-        <ul>
+    <div class="cart-container">
         {% for entry in items %}
-        <li>
-            {{ entry.product['product_name'] }} -
-            ${{ entry.product['unit_price'] }} × {{ entry.quantity }} =
-            <strong>${{ "%.2f"|format(entry.subtotal) }}</strong>
-            
-            <a href="{{ url_for('decrease_quantity', product_id=entry.product['product_id']) }}">[ - ]</a>
-            <a href="{{ url_for('increase_quantity', product_id=entry.product['product_id']) }}">[ + ]</a>
-            <a href="{{ url_for('remove_from_cart', product_id=entry.product['product_id']) }}">[Remove]</a>
-        </li>
-        
-        
+        <div class="cart-item">
+          <div class="item-info">
+            <h4>{{ entry.product['product_name'] }}</h4>
+            <p>Unit Price: ${{ entry.product['unit_price'] }}</p>
+            <p>Quantity: {{ entry.quantity }}</p>
+            <p>Subtotal: <strong>${{ "%.2f"|format(entry.subtotal) }}</strong></p>
+          </div>
+          <div class="item-actions">
+            <a href="{{ url_for('decrease_quantity', product_id=entry.product['product_id']) }}">−</a>
+            <a href="{{ url_for('increase_quantity', product_id=entry.product['product_id']) }}">＋</a>
+            <a href="{{ url_for('remove_from_cart', product_id=entry.product['product_id']) }}" class="remove-btn">🗑</a>
+          </div>
+        </div>
         {% endfor %}
-        </ul>
+      </div>
+      
+      {% if items %}
+        <p class="cart-total">Total: ${{ "%.2f"|format(total_price) }}</p>
+        <p><a href="{{ url_for('checkout') }}" class="checkout-btn">Proceed to Checkout</a></p>
+      {% else %}
+        <p>Your cart is empty.</p>
+      {% endif %}
+      
         <p><strong>Total:</strong> ${{ "%.2f"|format(total_price) }}</p>
         <p> <a href="{{ url_for('checkout') }}">Proceed to Checkout</a></p>
         
     {% else %}
         <p>Your cart is empty.</p>
     {% endif %}
-</body>
-</html>
+ {% endblock %}
