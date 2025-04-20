@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Checkout</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Address:</label><br>
+        <textarea name="address" required></textarea><br><br>
+
+        <button type="submit">Submit Order</button>
+    </form>
+
+    <p><a href="{{ url_for('view_cart') }}">← Back to Cart</a></p>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Grocery</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <a href="{{ url_for('view_cart') }}">🛒 View Cart</a>
+    <ul>
+        {% for product in products %}
+        <li>
+            {{ product['product_name'] }} -
+            ${{ product['unit_price'] }} 
+            ({{ product['unit_quantity'] }}) — Stock: {{ product['in_stock'] }}
+            {% if product['in_stock'] > 0 %}
+                <a href="{{ url_for('add_to_cart', product_id=product['product_id']) }}">[Add to Cart]</a>
+            {% else %}
+                <span style="color: gray;">[Out of Stock]</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
