@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,18 +24,21 @@
 
     
     <ul>
-        {% for product in products %}
-        <li>
-            {{ product['product_name'] }} -
-            ${{ product['unit_price'] }} 
-            ({{ product['unit_quantity'] }}) — Stock: {{ product['in_stock'] }}
-            {% if product['in_stock'] > 0 %}
-                <a href="{{ url_for('add_to_cart', product_id=product['product_id']) }}">[Add to Cart]</a>
-            {% else %}
-                <span style="color: gray;">[Out of Stock]</span>
-            {% endif %}
-        </li>
-        {% endfor %}
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <h4>{{ product['product_name'] }}</h4>
+                <p>${{ product['unit_price'] }} ({{ product['unit_quantity'] }})</p>
+                <p>Stock: {{ product['in_stock'] }}</p>
+                {% if product['in_stock'] > 0 %}
+                    <a href="{{ url_for('add_to_cart', product_id=product['product_id']) }}" class="add-button">Add to Cart</a>
+                {% else %}
+                    <span class="out-of-stock">Out of Stock</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+           
     </ul>
 </body>
 </html>
